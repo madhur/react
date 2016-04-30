@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Hello React!</title>
+    <script src="react.js"></script>
+   
+  </head>
+  <body>
+    <div id="app1"></div>
+   
+    <script type="text/javascript">
+     var TextAreaCounter = React.createClass({
+        propTypes: {
+          text: React.PropTypes.string
+        },
+
+        render: function()
+        {
+            return React.DOM.div(null, 
+             // React.DOM.textarea(null, this.props.text),
+             React.DOM.textarea({defaultValue: this.props.text}),
+              React.DOM.h3(null, this.props.text.length)
+            );
+        }
+
+     });
+
+     React.render(
+        React.createElement(TextAreaCounter, {text: "madhur"}), document.getElementById("app1")
+      );
+
+      
+    </script>
+    
+
+  </body>
+</html>

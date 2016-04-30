@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Hello React!</title>
+    <script src="react.js"></script>
+    <script src="JSXTransformer.js"></script>
+  </head>
+  <body>
+    <div id="app1"></div>
+    <div id="app2"></div>
+    <div id="app3"></div>
+
+  <div id="app4"></div>
+
+    <div id="app5"></div>
+    <script type="text/jsx">
+      React.render(
+        <h1 style={{  color: 'green' }}>Hello, world! by JSX</h1>,
+        document.getElementById('app1')
+      );
+
+      React.render(
+        React.createElement("h1", {style:  {  color: 'blue' } }, "Hello, world! by Pure JS"),
+        document.getElementById('app2')
+      );
+
+      React.render(
+        React.DOM.h1({style:  {  color: 'red' } }, "Hello, world! by wrapper dom"),
+        document.getElementById('app3')
+      );
+
+
+       var myComponent = React.createClass({
+        render: function()
+        {
+            return React.DOM.span(null, "My name is anonymous");
+        }
+      });
+
+      React.render(
+        React.createElement(myComponent, null), document.getElementById("app4")
+        );
+
+      var Component = React.createClass({
+        render: function()
+        {
+            return React.DOM.span(null, "My name is " + this.props.name);
+        }
+      });
+
+      React.render(
+        React.createElement(Component, { name: "Madhur"}), document.getElementById("app5")
+        );
+
+     // React.render(React.DOM.h1(null, "Hello world"), document.getElementById("app"));
+
+      
+    </script>
+    
+
+  </body>
+</html>

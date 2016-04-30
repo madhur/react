@@ -1,0 +1,21 @@
+{
+  "name": "snapterest",
+  "description": "",
+  "main": "index.js",
+  "authors": [
+    "Madhur <madhur.ahuja@helpchat.in>"
+  ],
+  "license": "ISC",
+  "moduleType": [],
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "react": "~15.0.1"
+  }
+}
