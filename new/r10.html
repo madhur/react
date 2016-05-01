@@ -1,0 +1,58 @@
+<html>
+<head>
+
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
+<script src="bower_components/react/react.js"></script>
+
+<script src="bower_components/react/react-dom.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.23/browser.min.js"></script>
+
+</head>
+
+<body>
+
+<div id='main'>
+</div>
+
+</body>
+
+<script type="text/babel">
+
+var ExampleForm = React.createClass({
+	
+	getInitialState: function()
+	{
+		return {message: 'REad and write'}
+	},
+
+	getDefaultProps: function()
+	{
+		return {message: 'Read only'}
+	},
+
+	onChange: function(event)
+	{
+		this.setState({message: event.target.value});
+	},
+
+	render: function()
+	{
+		return (
+			<div>
+				<input id='readOnly' className='form-control' type='text' value={this.props.message} />
+				<input id='readAndWrite' className='form-control' type='text' value = {this.state.message} onChange = {this.onChange} />
+			</div>
+		);
+	}
+
+
+});
+
+ReactDOM.render(<ExampleForm /> , document.getElementById('main'));
+
+</script>
+
+</html>

@@ -1,0 +1,53 @@
+<html>
+<head>
+
+<script src="bower_components/react/react.js"></script>
+
+<script src="bower_components/react/react-dom.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.23/browser.min.js"></script>
+
+</head>
+
+<body>
+
+<div id='main'>
+</div>
+
+<div id='main1'>
+</div>
+
+<div id='main2'>
+</div>
+
+</body>
+
+<script type="text/babel">
+
+var hello = React.createElement('h1', null, 'Hi there');
+
+var hello1=React.createClass({
+
+	render: function()
+	{
+		return React.createElement('h1', {className: 'madhur', style: {color: 'green'}}, 'Hi there from class');
+	}
+
+
+});
+
+var Hello2=React.createClass({
+
+	render: function()
+	{
+		return (<h1 style={{color:'red'}}>Hi there from JSX</h1>);
+	}
+});
+
+ReactDOM.render(hello, document.getElementById('main'));
+ReactDOM.render(React.createElement(hello1), document.getElementById('main1'));
+ReactDOM.render(<Hello2/> , document.getElementById('main2'));
+
+</script>
+
+</html>

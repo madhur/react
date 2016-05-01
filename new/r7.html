@@ -1,0 +1,125 @@
+<html>
+<head>
+
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
+<script src="bower_components/react/react.js"></script>
+
+<script src="bower_components/react/react-dom.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.23/browser.min.js"></script>
+
+</head>
+
+<body>
+
+<div id='main'>
+</div>
+
+</body>
+
+<script type="text/babel">
+
+
+var LikesLabel = React.createClass({
+	getDefaultProps: function() {
+		return {
+			count: 0,
+			icon: 'arrow-down'
+		}
+	},
+
+	
+	render: function()
+	{
+		return (
+			<div>
+				Likes {this.props.count}  <GlyphIcon icon={this.props.icon}/>
+			</div>
+		);
+	}
+});
+
+var HelloReact = React.createClass({
+
+	isIncreasing : false, 
+	icon: '',
+	
+	getInitialState: function() {
+		return {count: 0}
+	},
+
+	componentWillReceiveProps: function(nextProps)
+	{
+		console.log(nextProps);
+	},
+
+	shouldComponentUpdate: function(nextProps, nextState)
+	{
+		console.log('nextState.count: ', nextState.count, 'nextProps.isIncreasing: ', nextProps.isIncreasing);
+
+		
+		return nextState.count > 1;
+	},
+
+
+	like: function()
+	{
+		this.isIncreasing = true;
+		this.setState({count: this.state.count+1});
+
+	},
+
+	unlike: function()
+	{
+		this.isIncreasing = false;
+		this.setState({count: this.state.count-1});
+
+	},
+
+	render: function()
+	{
+		if(this.isIncreasing)
+			this.icon='circle-arrow-up'
+		else
+			this.icon='circle-arrow-down'
+
+		return (
+			<div>
+				<Button onClick={this.like}><GlyphIcon icon='thumbs-up'/>Like</Button>
+				<Button onClick={this.unlike}><GlyphIcon icon='thumbs-down'/>Unlike</Button>
+				<LikesLabel count={this.state.count} icon={this.icon} />
+			</div>
+		);
+	}
+
+});
+
+var Button = React.createClass({
+		render: function()
+		{
+			return (
+				<button onClick={this.props.onClick}>
+					{this.props.children}
+				</button>
+
+			);
+		}
+});
+
+var GlyphIcon = React.createClass({
+	
+	render: function()
+	{
+		return (
+			<span className={'glyphicon glyphicon-' + this.props.icon}></span>
+		);
+	}
+});
+
+ReactDOM.render(<HelloReact /> , document.getElementById('main'));
+
+</script>
+
+</html>

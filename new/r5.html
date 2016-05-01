@@ -1,0 +1,96 @@
+<html>
+<head>
+
+<script src="bower_components/react/react.js"></script>
+
+<script src="bower_components/react/react-dom.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.23/browser.min.js"></script>
+
+</head>
+
+<body>
+
+<div id='main'>
+</div>
+
+</body>
+
+<script type="text/babel">
+var HelloMessage = React.createClass({
+
+	render: function()
+	{
+
+		return <h2>{this.props.message}</h2>;
+	}
+
+});
+
+var TextBox = React.createClass({
+	getInitialState: function() {
+		return {
+			isEditing: false
+		}
+	},
+
+	update: function()
+	{
+		this.props.update(this.refs.messageTextBox.value);
+		this.setState({ isEditing: false});
+	},
+
+	edit: function()
+	{
+		this.setState({isEditing: true});
+	},
+
+	render: function()
+	{
+		return (
+			<div>
+				{this.props.label} <br/>
+				<input type='text' ref = 'messageTextBox' disabled = {!this.state.isEditing} />
+				{
+					this.state.isEditing?
+					<button onClick={this.update}>Update</button>
+					:
+					<button onClick={this.edit}>Edit</button>
+
+				}
+			</div>
+		);
+	}
+});
+
+var HelloReact = React.createClass({
+	getInitialState: function() {
+		return {firstName: '', lastName: ''}
+	},
+
+	update: function(key,value)
+	{
+		console.log(key + ' ' + value);
+		var newState = {};
+		newState[key] = value;
+		this.setState(newState);
+	},
+
+	render: function()
+	{
+		return (
+			<div>
+				<HelloMessage message={'Hello ' + this.state.firstName + ' ' + this.state.lastName}></HelloMessage>
+				<TextBox label = 'First Name' update={this.update.bind(this, 'firstName')}></TextBox>
+				<TextBox label='Last Name' update={this.update.bind(this, 'lastName')}></TextBox>
+			</div>
+		);
+	}
+
+});
+
+ReactDOM.render(<HelloReact /> , document.getElementById('main'));
+
+</script>
+
+</html>

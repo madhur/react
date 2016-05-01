@@ -1,0 +1,51 @@
+<html>
+<head>
+
+<script src="bower_components/react/react.js"></script>
+
+<script src="bower_components/react/react-dom.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.23/browser.min.js"></script>
+
+</head>
+
+<body>
+
+<div id='main'>
+</div>
+
+</body>
+
+<script type="text/babel">
+
+var Hello2=React.createClass({
+
+	getInitialState: function()
+	{
+	return {
+			message: 'default message'
+		}
+
+	},
+
+	render: function()
+	{
+		return (
+		<div>
+			<h1>{this.state.message}</h1>
+			<input type="text" onChange={this.onMessageChange} />
+		</div>
+		);
+	},
+
+	onMessageChange: function(e)
+	{
+		this.setState({message: e.target.value});
+	}
+});
+
+ReactDOM.render(<Hello2 /> , document.getElementById('main'));
+
+</script>
+
+</html>

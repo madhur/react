@@ -1,0 +1,76 @@
+<html>
+<head>
+
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
+<script src="bower_components/react/react.js"></script>
+
+<script src="bower_components/react/react-dom.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.23/browser.min.js"></script>
+
+</head>
+
+<body>
+
+<div id='main'>
+</div>
+
+</body>
+
+<script type="text/babel">
+
+var TextBox = React.createClass({
+	render: function()
+	{
+		return(
+			<input className='form-control' name={this.props.name} type='text' value={this.props.value} onChange={this.props.onChange} />
+
+		);
+	}
+});
+
+var ExampleForm = React.createClass({
+	getInitialState: function()
+	{
+		return {
+			form: {
+				firstName: 'Ryan',
+				lastName: 'Vice'
+			}
+		}
+	},
+
+	onChange: function(event)
+	{
+		this.state.form[event.target.name] = event.target.value;
+
+		this.setState({form: this.state.form});
+	},
+
+	onSubmit: function(event)
+	{
+		event.preventDefault();
+		console.log('Form subbmited. firstName: ' + this.state.form.firstName + ', lastName: ' + this.state.form.lastName);
+	},
+
+	render: function()
+	{
+		var self = this;
+
+		return (
+			<form onSubmit = {this.onSubmit}>
+				<TextBox name='firstName' value = {this.state.form.firstName} onChange={this.onChange} />
+				<TextBox name='lastName' value={this.state.form.lastName} onChange={this.onChange} />
+				<button className='btn btn-success' type='submit'>Submit</button>
+			</form>
+		);
+	}
+});
+
+ReactDOM.render(<ExampleForm /> , document.getElementById('main'));
+
+</script>
+
+</html>
