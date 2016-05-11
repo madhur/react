@@ -21,7 +21,7 @@ module.exports = {
 	resolve: {
 		root: __dirname,
 		alias: {
-
+			OpenWeatherMap: 'app/api/OpenWeatherMap.jsx'
 		},
 		
 		extensions: ['', '.jsx', '.js' ]
