@@ -5,7 +5,7 @@ var WeatherForm = require('./WeatherForm')
 var WeatherMessage = require('./WeatherMessage')
 
 var OpenWeatherMap =require('OpenWeatherMap');
-
+var ErrorModal = require('ErrorModal');
 
 var Weather = React.createClass({
 
@@ -31,10 +31,11 @@ var Weather = React.createClass({
 		// 	temp: 88
 		// });
 
-		debugger;
-		
 		this.setState({
-			isLoading: true
+			isLoading: true,
+			errorMessage: undefined,
+			temp: undefined,
+			location: undefined
 		})
 
 		OpenWeatherMap.getTemp(location).then(function(temp)
@@ -45,9 +46,11 @@ var Weather = React.createClass({
 			isLoading: false
 			});
 
-		}, function(error)
+		}, function(e)
 		{
-			alert(error);
+			alert(e);
+			errorMessage = e.message;
+
 			that.setState({
 			isLoading: false
 		})
@@ -55,11 +58,35 @@ var Weather = React.createClass({
 		});
 	},
 
+	componentDidMount: function()
+	{
+		var location = this.props.location.query.location;
+
+		if(location && location.length > 0)
+		{
+			this.onSubmitHandleFunc(location);
+			window.location.hash="#/";
+		}
+	},
+
+	componentWillReceiveProps: function(newProps)
+	{
+		var location = newProps.location.query.location;
+
+		if(location && location.length > 0)
+		{
+			this.onSubmitHandleFunc(location);
+			window.location.hash="#/";
+		}
+
+	},
+
 	render: function()
 	{
 		var temp = this.state.temp;
 		var location = this.state.location;
 		var isLoading = this.state.isLoading;
+		var errorMessage = this.state.errorMessage;
 
 		function showLoadingMessage()
 		{
@@ -69,7 +96,7 @@ var Weather = React.createClass({
 
 			if(isLoading)
 			{
-				return (<h3>Loading Weather...</h3>);
+				return (<h3 className="text-center">Loading Weather...</h3>);
 			}
 			else if(temp && location)
 			{
@@ -80,11 +107,22 @@ var Weather = React.createClass({
 			
 		}
 
+		function renderError()
+		{
+			if(typeof errorMessage === 'string')
+			{
+				return (
+					<ErrorModal message={errorMessage}/>
+					)
+			}
+		}
+
 		return (
 				<div>
-					<h3>Weather Component</h3>
+					<h1 className="text-center page-title">Get Weather</h1>
 					<WeatherForm onSubmitHandle = {this.onSubmitHandleFunc}/>
 					{showLoadingMessage()}
+					{renderError()}
 				</div>
 			);
 

@@ -15,7 +15,10 @@ var ReactDOM = require('react-dom')
 
 var About = (props) => {
 	return (
-				<h3>About Component</h3>
+			<div>
+				<h1 className="text-center">About</h1>
+				<p>This is a weather application build on React. I have built this for the Complete React</p>
+			</div>
 			);
 };
 

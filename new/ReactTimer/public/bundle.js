@@ -26027,19 +26027,12 @@
 			}
 		},
 
-		clearCallback: function clearCallback() {
-			this.setState({
-				errorMessage: undefined
-			});
-		},
-
 		render: function render() {
 			var errorMessage = this.state.errorMessage;
-			var clearCallback = this.clearCallback;
 
 			function renderError() {
 				if (typeof errorMessage === 'string') {
-					return React.createElement(ErrorModal, { message: errorMessage, callback: clearCallback });
+					return React.createElement(ErrorModal, { message: errorMessage });
 				}
 			}
 
@@ -26071,8 +26064,6 @@
 	/* WEBPACK VAR INJECTION */(function($) {'use strict';
 
 	var React = __webpack_require__(8);
-	var ReactDOM = __webpack_require__(40);
-	var ReactDOMServer = __webpack_require__(269);
 
 	var ErrorModal = React.createClass({
 		displayName: 'ErrorModal',
@@ -26090,7 +26081,12 @@
 		},
 
 		componentDidMount: function componentDidMount() {
-			var modalMarkup = React.createElement(
+			var modal = new Foundation.Reveal($('#error-modal'));
+			modal.open();
+		},
+
+		render: function render() {
+			return React.createElement(
 				'div',
 				{ className: 'reveal tiny text-centered', id: 'error-modal', 'data-reveal': '' },
 				React.createElement(
@@ -26113,22 +26109,6 @@
 					)
 				)
 			);
-
-			var $modal = $(ReactDOMServer.renderToString(modalMarkup));
-			$(ReactDOM.findDOMNode(this)).html($modal);
-
-			var modal = new Foundation.Reveal($('#error-modal'));
-			modal.open();
-			var callback = this.props.callback;
-
-			$(document).on('closed.zf.reveal', '[data-reveal]', function () {
-				console.log('closed');
-				callback();
-			});
-		},
-
-		render: function render() {
-			return React.createElement('div', null);
 		}
 
 	});
@@ -27852,218 +27832,6 @@
 
 	// exports
 
-
-/***/ },
-/* 269 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	module.exports = __webpack_require__(270);
-
-
-/***/ },
-/* 270 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/**
-	 * Copyright 2013-present, Facebook, Inc.
-	 * All rights reserved.
-	 *
-	 * This source code is licensed under the BSD-style license found in the
-	 * LICENSE file in the root directory of this source tree. An additional grant
-	 * of patent rights can be found in the PATENTS file in the same directory.
-	 *
-	 * @providesModule ReactDOMServer
-	 */
-
-	'use strict';
-
-	var ReactDefaultInjection = __webpack_require__(45);
-	var ReactServerRendering = __webpack_require__(271);
-	var ReactVersion = __webpack_require__(38);
-
-	ReactDefaultInjection.inject();
-
-	var ReactDOMServer = {
-	  renderToString: ReactServerRendering.renderToString,
-	  renderToStaticMarkup: ReactServerRendering.renderToStaticMarkup,
-	  version: ReactVersion
-	};
-
-	module.exports = ReactDOMServer;
-
-/***/ },
-/* 271 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/* WEBPACK VAR INJECTION */(function(process) {/**
-	 * Copyright 2013-present, Facebook, Inc.
-	 * All rights reserved.
-	 *
-	 * This source code is licensed under the BSD-style license found in the
-	 * LICENSE file in the root directory of this source tree. An additional grant
-	 * of patent rights can be found in the PATENTS file in the same directory.
-	 *
-	 * @providesModule ReactServerRendering
-	 */
-	'use strict';
-
-	var ReactDOMContainerInfo = __webpack_require__(166);
-	var ReactDefaultBatchingStrategy = __webpack_require__(137);
-	var ReactElement = __webpack_require__(15);
-	var ReactMarkupChecksum = __webpack_require__(168);
-	var ReactServerBatchingStrategy = __webpack_require__(272);
-	var ReactServerRenderingTransaction = __webpack_require__(273);
-	var ReactUpdates = __webpack_require__(62);
-
-	var emptyObject = __webpack_require__(28);
-	var instantiateReactComponent = __webpack_require__(123);
-	var invariant = __webpack_require__(14);
-
-	/**
-	 * @param {ReactElement} element
-	 * @return {string} the HTML markup
-	 */
-	function renderToStringImpl(element, makeStaticMarkup) {
-	  var transaction;
-	  try {
-	    ReactUpdates.injection.injectBatchingStrategy(ReactServerBatchingStrategy);
-
-	    transaction = ReactServerRenderingTransaction.getPooled(makeStaticMarkup);
-
-	    return transaction.perform(function () {
-	      var componentInstance = instantiateReactComponent(element);
-	      var markup = componentInstance.mountComponent(transaction, null, ReactDOMContainerInfo(), emptyObject);
-	      if (!makeStaticMarkup) {
-	        markup = ReactMarkupChecksum.addChecksumToMarkup(markup);
-	      }
-	      return markup;
-	    }, null);
-	  } finally {
-	    ReactServerRenderingTransaction.release(transaction);
-	    // Revert to the DOM batching strategy since these two renderers
-	    // currently share these stateful modules.
-	    ReactUpdates.injection.injectBatchingStrategy(ReactDefaultBatchingStrategy);
-	  }
-	}
-
-	function renderToString(element) {
-	  !ReactElement.isValidElement(element) ? process.env.NODE_ENV !== 'production' ? invariant(false, 'renderToString(): You must pass a valid ReactElement.') : invariant(false) : void 0;
-	  return renderToStringImpl(element, false);
-	}
-
-	function renderToStaticMarkup(element) {
-	  !ReactElement.isValidElement(element) ? process.env.NODE_ENV !== 'production' ? invariant(false, 'renderToStaticMarkup(): You must pass a valid ReactElement.') : invariant(false) : void 0;
-	  return renderToStringImpl(element, true);
-	}
-
-	module.exports = {
-	  renderToString: renderToString,
-	  renderToStaticMarkup: renderToStaticMarkup
-	};
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(10)))
-
-/***/ },
-/* 272 */
-/***/ function(module, exports) {
-
-	/**
-	 * Copyright 2014-present, Facebook, Inc.
-	 * All rights reserved.
-	 *
-	 * This source code is licensed under the BSD-style license found in the
-	 * LICENSE file in the root directory of this source tree. An additional grant
-	 * of patent rights can be found in the PATENTS file in the same directory.
-	 *
-	 * @providesModule ReactServerBatchingStrategy
-	 */
-
-	'use strict';
-
-	var ReactServerBatchingStrategy = {
-	  isBatchingUpdates: false,
-	  batchedUpdates: function (callback) {
-	    // Don't do anything here. During the server rendering we don't want to
-	    // schedule any updates. We will simply ignore them.
-	  }
-	};
-
-	module.exports = ReactServerBatchingStrategy;
-
-/***/ },
-/* 273 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/**
-	 * Copyright 2014-present, Facebook, Inc.
-	 * All rights reserved.
-	 *
-	 * This source code is licensed under the BSD-style license found in the
-	 * LICENSE file in the root directory of this source tree. An additional grant
-	 * of patent rights can be found in the PATENTS file in the same directory.
-	 *
-	 * @providesModule ReactServerRenderingTransaction
-	 */
-
-	'use strict';
-
-	var _assign = __webpack_require__(11);
-
-	var PooledClass = __webpack_require__(13);
-	var Transaction = __webpack_require__(69);
-
-	/**
-	 * Executed within the scope of the `Transaction` instance. Consider these as
-	 * being member methods, but with an implied ordering while being isolated from
-	 * each other.
-	 */
-	var TRANSACTION_WRAPPERS = [];
-
-	var noopCallbackQueue = {
-	  enqueue: function () {}
-	};
-
-	/**
-	 * @class ReactServerRenderingTransaction
-	 * @param {boolean} renderToStaticMarkup
-	 */
-	function ReactServerRenderingTransaction(renderToStaticMarkup) {
-	  this.reinitializeTransaction();
-	  this.renderToStaticMarkup = renderToStaticMarkup;
-	  this.useCreateElement = false;
-	}
-
-	var Mixin = {
-	  /**
-	   * @see Transaction
-	   * @abstract
-	   * @final
-	   * @return {array} Empty list of operation wrap procedures.
-	   */
-	  getTransactionWrappers: function () {
-	    return TRANSACTION_WRAPPERS;
-	  },
-
-	  /**
-	   * @return {object} The queue to collect `onDOMReady` callbacks with.
-	   */
-	  getReactMountReady: function () {
-	    return noopCallbackQueue;
-	  },
-
-	  /**
-	   * `PooledClass` looks for this, and will invoke this before allowing this
-	   * instance to be reused.
-	   */
-	  destructor: function () {}
-	};
-
-	_assign(ReactServerRenderingTransaction.prototype, Transaction.Mixin, Mixin);
-
-	PooledClass.addPoolingTo(ReactServerRenderingTransaction);
-
-	module.exports = ReactServerRenderingTransaction;
 
 /***/ }
 /******/ ]);
